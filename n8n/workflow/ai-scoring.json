@@ -1,0 +1,116 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "validate",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1ab142b2-ef40-4683-bc24-2c054ec2a5c6",
+      "name": "Webhook",
+      "webhookId": "056fbd41-4d7e-4095-b171-7d14dcea179f"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an English teacher.\nPlease grade this sentence: \"{{ $json.body.sentence }}\"\nBased on the word: \"{{ $json.body.word }}\"\n\nRules:\n1. If the input is empty, return score 0.\n2. Return ONLY a JSON object with this structure (no other text):\n{\n  \"score\": <number 0-10>,\n  \"level\": \"Beginner\" or \"Intermediate\" or \"Advanced\",\n  \"suggestion\": \"<short advice in Thai or English>\",\n  \"corrected_sentence\": \"<better version>\"\n}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        288,
+        0
+      ],
+      "id": "45ba3bba-4c06-4fb0-a6e4-288c960e0190",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        208,
+        208
+      ],
+      "id": "afe2654a-6dbf-44d3-938d-7ff7957632bf",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "V6u7UUfPjgyM1EF9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        640,
+        0
+      ],
+      "id": "4c19ce4b-9e36-406b-b0b3-e4e7260d06e8",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fd875fe9-dc52-4fbd-abdb-43986ae3cf7a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6356c4add2ed43e9aebccb2385e3c558b6ca1003a67b6d44d0a09fadedd787ea"
+  },
+  "id": "3d2iOFEhSCRDWTPJ",
+  "tags": []
+}

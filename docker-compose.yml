@@ -1,0 +1,49 @@
+services:
+  # ---------------------------
+  # 1. Backend Service (FastAPI)
+  # ---------------------------
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - N8N_HOST=${N8N_HOST} # ดึงค่าจาก .env
+    depends_on:
+      - n8n
+    restart: always
+
+  # ---------------------------
+  # 2. AI Workflow Service (n8n)
+  # ---------------------------
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      # ปรับ Webhook URL ให้ถูกต้องเพื่อให้ Callback กลับมาได้ (สำคัญ)
+      - WEBHOOK_URL=http://localhost:5678/
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n/workflows:/data/workflows # Map ไฟล์ Workflow เข้าไป
+    # command: /bin/sh -c "n8n start"
+    restart: always
+
+  # ---------------------------
+  # 3. Frontend Service (Next.js)
+  # ---------------------------
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      # volumes:
+      #   - ./frontend:/app
+      #   - /app/node_modules
+    restart: always
+
+volumes:
+  n8n_data:
