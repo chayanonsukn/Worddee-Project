@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# dependencies (ส่วนของ Dependencies ที่ไม่ต้องนำขึ้น Git)
 /node_modules
 /.pnp
 .pnp.*

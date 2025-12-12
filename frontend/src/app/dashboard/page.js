@@ -7,28 +7,34 @@ import { Flame, Clock } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export default function Dashboard() {
+  // summary: เก็บข้อมูลสรุปผลการเรียนของผู้ใช้ (User Summary Data)
   const [summary, setSummary] = useState(null);
+  // loading: สถานะการโหลดข้อมูลเริ่มต้น (Initial Loading State)
   const [loading, setLoading] = useState(true);
 
+  // useEffect จะทำงานเมื่อ Component ถูก Mount เพื่อโหลดข้อมูลสรุป
   useEffect(() => {
     loadSummary();
   }, []);
 
+  // ฟังก์ชันสำหรับดึงข้อมูลสรุปจาก API (Fetch Summary)
   const loadSummary = async () => {
     try {
-      const data = await fetchSummary();
-      setSummary(data);
+      const data = await fetchSummary(); // เรียก API
+      setSummary(data); // เก็บข้อมูลลง State
     } catch (error) {
       console.error('Error fetching summary:', error);
     } finally {
-      setLoading(false);
+      setLoading(false); // ปิดสถานะ Loading ไม่ว่าจะสำเร็จหรือไม่
     }
   };
 
+  // ตรวจสอบสถานะ Loading
   if (loading) {
     return <div className="min-h-screen bg-[#8da399] flex items-center justify-center text-white">Loading dashboard...</div>;
   }
 
+  // กรณีโหลดข้อมูลไม่สำเร็จ หรือไม่มีข้อมูล
   if (!summary) {
     return <div className="min-h-screen bg-[#8da399] flex items-center justify-center text-white">Failed to load dashboard.</div>;
   }

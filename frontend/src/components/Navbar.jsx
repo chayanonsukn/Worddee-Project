@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { User } from 'lucide-react';
 
+// เมนูบาร์ด้านบน (Navigation Bar)
 export default function Navbar() {
   return (
     <nav className="bg-white py-4 px-8 flex justify-between items-center shadow-sm">

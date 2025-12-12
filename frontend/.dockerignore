@@ -1,3 +1,4 @@
+# ไม่รวม dependencies เพื่อลดขนาด image (Exclude config files and local env)
 node_modules
 .next
 .git

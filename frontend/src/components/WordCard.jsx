@@ -1,11 +1,13 @@
 import { useState } from 'react';
 
 export default function WordCard({ wordData, onSubmit }) {
+  // sentence: เก็บค่าประโยคที่ผู้ใช้พิมพ์ (Input State)
   const [sentence, setSentence] = useState('');
 
+  // ฟังก์ชันส่งข้อมูลเมื่อกดปุ่ม Submit
   const handleSubmit = () => {
     if (sentence.trim()) {
-      onSubmit(sentence);
+      onSubmit(sentence); // เรียกฟังก์ชัน onSubmit ที่ได้รับมาจาก Props
     }
   };
 
@@ -22,10 +24,9 @@ export default function WordCard({ wordData, onSubmit }) {
 
       <div className="flex flex-col md:flex-row gap-8 mb-8 border border-gray-200 rounded-2xl p-4">
         <div className="w-full md:w-1/3">
-            {/* Placeholder for image - using a colored div if no image provided, or a generic one */}
             <div className="w-full h-48 bg-gray-200 rounded-xl overflow-hidden">
-                <img 
-                    src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2573&auto=format&fit=crop" 
+                <img
+                    src={wordData.img_url || 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2573&auto=format&fit=crop'} 
                     alt="Word context" 
                     className="w-full h-full object-cover"
                 />
@@ -43,7 +44,7 @@ export default function WordCard({ wordData, onSubmit }) {
                 <span className="font-bold">Meaning:</span> {wordData.meaning}
             </p>
             <p className="text-gray-500 text-sm">
-                &quot;The jet braked hard as its wheels touched the <span className="underline">{wordData.word.toLowerCase()}</span>.&quot;
+                &quot;The sentence of <span className="underline">{wordData.word.toLowerCase()}</span>.&quot;
             </p>
         </div>
       </div>
@@ -51,7 +52,7 @@ export default function WordCard({ wordData, onSubmit }) {
       <textarea
         className="w-full border-2 border-gray-300 bg-gray-50 rounded-xl p-4 mb-6 focus:outline-none focus:ring-2 focus:ring-[#1a403d] focus:border-transparent resize-none text-gray-800 placeholder-gray-400"
         rows="3"
-        placeholder={`The plane ${wordData.word.toLowerCase()} is under construction.`}
+        placeholder={`The ${wordData.word.toLowerCase()} is under construction.`}
         value={sentence}
         onChange={(e) => setSentence(e.target.value)}
       ></textarea>

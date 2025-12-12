@@ -1,3 +1,4 @@
+// หน้าจอแสดงผลขณะกำลังโหลดข้อมูล (Loading State UI)
 export default function LoadingSkeleton() {
   return (
     <div className="bg-white rounded-3xl p-12 max-w-4xl w-full shadow-xl animate-pulse">

@@ -1,19 +1,22 @@
+# ติดตั้ง Node.js 20 เฉพาะสำหรับ Alpine Linux (Base Image)
 FROM node:20-alpine AS base
 
-# Install dependencies only when needed
+# ติดตั้ง dependencies เฉพาะที่จำเป็นเท่านั้น (Install Dependencies)
+# ใช้เพื่อแคช dependencies ถ้าไม่มีการเปลี่ยนแปลง package.json
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Rebuild the source code only when needed
+# สร้าง Source Code ใหม่เพื่อเตรียมใช้งาน (Build Source Code)
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-# Production image, copy all the files and run next
+# สร้าง Image สำหรับ Production (Production Image)
+# คัดลอกเฉพาะไฟล์ที่จำเป็นและรัน Next.js เพื่อลดขนาด Image
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV production

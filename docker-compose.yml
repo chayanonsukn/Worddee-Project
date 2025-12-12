@@ -7,9 +7,9 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - N8N_HOST=${N8N_HOST} # ดึงค่าจาก .env
+      - N8N_HOST=${N8N_HOST} # ดึงค่าจาก .env มาใช้งาน (Environment Variable)
     depends_on:
-      - n8n
+      - n8n # รอให้ Service n8n รันเสร็จก่อน (Dependency)
     restart: always
 
   # ---------------------------
@@ -23,11 +23,11 @@ services:
       - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE}
       - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
       - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
-      # ปรับ Webhook URL ให้ถูกต้องเพื่อให้ Callback กลับมาได้ (สำคัญ)
+      # ปรับ Webhook URL ให้ถูกต้องเพื่อให้ n8n ส่ง Callback กลับมาได้ (Webhook Configuration)
       - WEBHOOK_URL=http://localhost:5678/
     volumes:
-      - n8n_data:/home/node/.n8n
-      - ./n8n/workflows:/data/workflows # Map ไฟล์ Workflow เข้าไป
+      - n8n_data:/home/node/.n8n # เก็บข้อมูลถาวรของ n8n (Persistent Volume)
+      - ./n8n/workflows:/data/workflows # เชื่อมต่อโฟลเดอร์ Workflow จากเครื่องเราเข้าไปใน Container (Bind Mount)
     # command: /bin/sh -c "n8n start"
     restart: always
 

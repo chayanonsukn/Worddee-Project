@@ -1,5 +1,8 @@
 import Link from 'next/link';
 
+// result: ผลลัพธ์การตรวจสอบ (Validation Result)
+// userSentence: ประโยคที่ผู้ใช้พิมพ์
+// onReset: ฟังก์ชันสำหรับโหลดคำศัพท์ใหม่
 export default function FeedbackResult({ result, userSentence, onReset }) {
   return (
     <div className="bg-white rounded-3xl p-12 max-w-4xl w-full shadow-xl text-center">
